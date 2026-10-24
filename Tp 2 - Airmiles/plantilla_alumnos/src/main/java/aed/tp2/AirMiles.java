@@ -28,12 +28,24 @@ public class AirMiles implements SistemaAirMiles {
         throw new UnsupportedOperationException("Sin implementar");
     }
 
-    public void canjearMillas(int id, double cantidad) {
-        throw new UnsupportedOperationException("Sin implementar");
+    public void canjearMillas(int id, double millas) {
+        InfoUsuario info = usuarios.obtener(id);
+        
+        info.millasDisponibles = info.millasDisponibles - millas;
+        info.historial.canjes.agregarAtras(millas);
     }
 
-    public void transferirMillas(int origen, int destino, double cantidad) {
-        throw new UnsupportedOperationException("Sin implementar");
+    public void transferirMillas(int idOrigen, int idDestino, double millas) {
+        InfoUsuario infoOrigen = usuarios.obtener(idOrigen);
+        InfoUsuario infoDestino = usuarios.obtener(idDestino);
+
+        infoOrigen.millasDisponibles = infoOrigen.millasDisponibles - millas;
+        infoDestino.millasDisponibles = infoDestino.millasDisponibles + millas;
+        
+        Transferencia trans = new Transferencia(idOrigen, idDestino, millas);
+        
+        infoOrigen.historial.transferencias.agregarAtras(trans);
+        infoDestino.historial.transferencias.agregarAtras(trans);
     }
 
     public double consultarSaldo(int u) {
